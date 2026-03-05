@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - ContentCreator Pro</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Script pentru temă -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        })();
+    </script>
+    
+    <!-- Verificare autentificare -->
+    <script>
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            window.location.href = 'index.html?login=required';
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a4e6;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --dark-bg: #1e1e2e;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e9ecef;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #f8f9fa;
+            --text-muted: #b2bec3;
+            --border-color: #2d3a5e;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: var(--border-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .dashboard-main {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            color: var(--text-muted);
+        }
+
+        /* Period Selector */
+        .period-selector {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            width: 200px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Grid Systems */
+        .grid-4, .grid-2 {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Cards */
+        .stat-card, .action-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            height: fit-content;
+        }
+
+        .stat-card:hover, .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Stat Card Content */
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .stat-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--danger-color); }
+
+        /* Platform Colors */
+        .yt-color { background: #FF0000; }
+        .ig-color { background: #E4405F; }
+        .tt-color { background: #000000; }
+        .fb-color { background: #1877F2; }
+
+        [data-theme="dark"] .tt-color { background: #ffffff; }
+
+        /* Top Posts */
+        .post-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-platform {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .post-details {
+            flex: 1;
+        }
+
+        .post-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .post-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .post-stats {
+            text-align: right;
+        }
+
+        .post-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .post-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Progress Bars */
+        .platform-growth {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .growth-item {
+            width: 100%;
+        }
+
+        .growth-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Canvas */
+        canvas {
+            max-height: 250px;
+            width: 100% !important;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .dashboard-main {
+                padding: 0 1rem;
+            }
+            
+            .grid-4, .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+            
+            .period-selector {
+                justify-content: stretch;
+            }
+            
+            .form-control {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-outline, .btn-primary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Dark mode adjustments */
+        [data-theme="dark"] .post-platform i.fa-tiktok {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-video"></i>
+                <span>ContentCreator Pro</span>
+            </div>
+            
+            <div class="nav-right">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <a href="dashboard.html" class="btn-outline">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <div class="welcome-section">
+            <h1><i class="fas fa-chart-line" style="color: var(--primary-color);"></i> Analytics & Statistici</h1>
+            <p>Monitorizează performanța conținutului tău pe toate platformele</p>
+        </div>
+
+        <!-- Period Selector -->
+        <div class="period-selector">
+            <select id="periodSelect" class="form-control" onchange="changePeriod(this.value)">
+                <option value="7">Ultimele 7 zile</option>
+                <option value="30" selected>Ultimele 30 zile</option>
+                <option value="90">Ultimele 90 zile</option>
+                <option value="365">Ultimul an</option>
+            </select>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid-4">
+            <!-- Card 1: Total Views -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(108, 92, 231, 0.1);">
+                        <i class="fas fa-eye" style="color: var(--primary-color);"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1.2M</h3>
+                        <p>Total views</p>
+                    </div>
+                </div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +15.3% vs luna trecută
+                </div>
+            </div>
+            
+            <!-- Card 2: Engagement -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(0, 184, 148, 0.1);">
+                        <i class="fas fa-heart" style="color: var(--success-color);"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>85.4K</h3>
+                        <p>Engagement</p>
+                    </div>
+                </div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +8.2% vs luna trecută
+                </div>
+            </div>
+            
+            <!-- Card 3: Followers -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(253, 203, 110, 0.1);">
+                        <i class="fas fa-users" style="color: var(--warning-color);"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>50.2K</h3>
+                        <p>Followers</p>
+                    </div>
+                </div>
+                <div class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +18.2% vs luna trecută
+                </div>
+            </div>
+            
+            <!-- Card 4: Best Time -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(214, 48, 49, 0.1);">
+                        <i class="fas fa-clock" style="color: var(--danger-color);"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>20:00</h3>
+                        <p>Best time</p>
+                    </div>
+                </div>
+                <div class="stat-trend" style="color: var(--text-muted);">
+                    <i class="fas fa-calendar"></i> Miercuri
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Charts -->
+        <div class="grid-2">
+            <!-- Engagement Chart -->
+            <div class="action-card">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem;">Evoluție engagement</h3>
+                <canvas id="engagementChart"></canvas>
+            </div>
+            
+            <!-- Platform Distribution -->
+            <div class="action-card">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem;">Distribuție platforme</h3>
+                <canvas id="platformChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Secondary Content -->
+        <div class="grid-2">
+            <!-- Top Posts -->
+            <div class="action-card">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem;">Top postări</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div class="post-item">
+                        <div class="post-platform">
+                            <i class="fab fa-instagram" style="color: #E4405F;"></i>
+                        </div>
+                        <div class="post-details">
+                            <div class="post-title">Review produs nou</div>
+                            <div class="post-meta">Acum 2 zile</div>
+                        </div>
+                        <div class="post-stats">
+                            <div class="post-value">12.4K</div>
+                            <div class="post-label">views</div>
+                        </div>
+                    </div>
+                    
+                    <div class="post-item">
+                        <div class="post-platform">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <div class="post-details">
+                            <div class="post-title">Dans viral</div>
+                            <div class="post-meta">Acum 5 zile</div>
+                        </div>
+                        <div class="post-stats">
+                            <div class="post-value">45.2K</div>
+                            <div class="post-label">views</div>
+                        </div>
+                    </div>
+                    
+                    <div class="post-item">
+                        <div class="post-platform">
+                            <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                        </div>
+                        <div class="post-details">
+                            <div class="post-title">Tutorial SEO</div>
+                            <div class="post-meta">Acum o săptămână</div>
+                        </div>
+                        <div class="post-stats">
+                            <div class="post-value">23.1K</div>
+                            <div class="post-label">views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Platform Growth -->
+            <div class="action-card">
+                <h3 style="margin-bottom: 1rem; font-size: 1rem;">Creștere platforme</h3>
+                <div class="platform-growth">
+                    <div class="growth-item">
+                        <div class="growth-header">
+                            <span>YouTube</span>
+                            <span class="trend-up">+15%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%; background: #FF0000;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="growth-item">
+                        <div class="growth-header">
+                            <span>Instagram</span>
+                            <span class="trend-up">+25%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%; background: #E4405F;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="growth-item">
+                        <div class="growth-header">
+                            <span>TikTok</span>
+                            <span class="trend-up">+45%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill tt-color" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="growth-item">
+                        <div class="growth-header">
+                            <span>Facebook</span>
+                            <span class="trend-down">-5%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%; background: #1877F2;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-outline" onclick="exportData('pdf')">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </button>
+            <button class="btn-outline" onclick="exportData('csv')">
+                <i class="fas fa-file-csv"></i> Export CSV
+            </button>
+            <button class="btn-primary" onclick="refreshData()">
+                <i class="fas fa-sync-alt"></i> Reîmprospătează
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // ===== VARIABILE GLOBALE =====
+        let charts = {};
+
+        // ===== FUNCȚII PENTRU TEMĂ =====
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (!themeToggle) return;
+            
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        function toggleTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            setTimeout(() => {
+                initCharts();
+            }, 100);
+        }
+
+        // ===== FUNCȚII PENTRU CHART-URI =====
+        function initCharts() {
+            // Engagement Chart
+            const ctx1 = document.getElementById('engagementChart').getContext('2d');
+            if (charts.engagement) charts.engagement.destroy();
+            
+            charts.engagement = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Săpt 1', 'Săpt 2', 'Săpt 3', 'Săpt 4', 'Săpt 5'],
+                    datasets: [
+                        {
+                            label: 'Views',
+                            data: [12000, 19000, 15000, 25000, 22000],
+                            borderColor: '#6c5ce7',
+                            backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'Likes',
+                            data: [8000, 12000, 10000, 18000, 15000],
+                            borderColor: '#00b894',
+                            backgroundColor: 'rgba(0, 184, 148, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                font: { size: 11 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(128, 128, 128, 0.1)'
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-muted'),
+                                font: { size: 10 },
+                                callback: function(value) {
+                                    return value >= 1000 ? value/1000 + 'K' : value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-muted'),
+                                font: { size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Platform Chart
+            const ctx2 = document.getElementById('platformChart').getContext('2d');
+            if (charts.platform) charts.platform.destroy();
+            
+            const isDarkMode = document.documentElement.hasAttribute('data-theme');
+            
+            charts.platform = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['YouTube', 'Instagram', 'TikTok', 'Facebook'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: ['#FF0000', '#E4405F', isDarkMode ? '#ffffff' : '#000000', '#1877F2'],
+                        borderWidth: 0,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                font: { size: 11 },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)'
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // ===== FUNCȚII PENTRU ANALYTICS =====
+        function changePeriod(days) {
+            showNotification(`Perioadă schimbată: ultimele ${days} zile`, 'info');
+        }
+
+        function exportData(format) {
+            showNotification(`Export date în format ${format.toUpperCase()}...`, 'info');
+            setTimeout(() => {
+                showNotification(`✅ Export ${format.toUpperCase()} realizat cu succes!`);
+            }, 1500);
+        }
+
+        function refreshData() {
+            showNotification('📊 Se reîmprospătează datele...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Date reîmprospătate!');
+                initCharts();
+            }, 1000);
+        }
+
+        // ===== FUNCȚIE NOTIFICARE =====
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#00b894' : type === 'error' ? '#d63031' : '#6c5ce7'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 50px;
+                font-size: 0.9rem;
+                z-index: 10000;
+                animation: slideUp 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        // ===== INITIALIZARE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            initCharts();
+            
+            window.addEventListener('resize', function() {
+                setTimeout(() => {
+                    initCharts();
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

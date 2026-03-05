@@ -1,0 +1,98 @@
+/* ===== DARK MODE STYLES ===== */
+
+[data-theme="dark"] {
+    --bg-primary: #16213e;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #ffffff;
+    --text-secondary: #b8b8b8;
+    --text-muted: #a0a0a0;
+    --border-color: #2d4059;
+    --card-bg: #1a1a2e;
+    --hover-bg: #2d4059;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: var(--text-primary);
+}
+
+/* ===== NAVBAR ===== */
+[data-theme="dark"] .navbar {
+    background: rgba(26, 26, 46, 0.95);
+    border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .navbar .logo {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .lang-btn {
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .lang-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-outline {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+}
+
+[data-theme="dark"] .btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+[data-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+/* ===== HERO SECTION ===== */
+[data-theme="dark"] .hero-content h1 {
+    color: white;
+}
+
+[data-theme="dark"] .hero-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .stat-number {
+    color: white;
+}
+
+[data-theme="dark"] .stat-label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== PLATFORM CARDS ===== */
+[data-theme="dark"] .platform-card {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .platform-card p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .platform-card h3 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .platform-card i {
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+}
+
+/* Continuă cu restul stilurilor pentru toate secțiunile */

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Conținut AI - ContentCreator Pro</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Boxicons pentru iconițe premium -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a4e6;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --dark-bg: #1e1e2e;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e9ecef;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            
+            /* Culori oficiale platforme */
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --tiktok-color: #000000;
+            --tiktok-gradient: linear-gradient(145deg, #25f4ee 0%, #fe2c55 50%, #000000 100%);
+            --youtube-color: #ff0000;
+            --facebook-color: #1877f2;
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #f8f9fa;
+            --text-muted: #b2bec3;
+            --border-color: #2d3a5e;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            --tiktok-color: #ffffff;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Navigation Premium */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #a363d9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: var(--border-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateX(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7b6ced, var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::after {
+            left: 100%;
+        }
+
+        /* Main Content */
+        .dashboard-main {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Welcome Section Premium */
+        .welcome-section {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .welcome-section h1 i {
+            background: linear-gradient(135deg, var(--primary-color), #a363d9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+        }
+
+        .welcome-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Grid Systems */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Platform Cards Premium */
+        .platform-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0.6;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .platform-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            opacity: 0.9 !important;
+        }
+
+        .platform-card.active {
+            opacity: 1;
+            border: none;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.2);
+        }
+
+        .platform-card i {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Culori premium pentru platforme */
+        .platform-card.youtube i { color: #FF0000; }
+        .platform-card.youtube.active { 
+            background: linear-gradient(135deg, #FF0000, #ff4d4d);
+            color: white;
+        }
+        .platform-card.youtube.active i { color: white; }
+        .platform-card.youtube.active p { color: rgba(255,255,255,0.9); }
+
+        .platform-card.instagram i { 
+            background: var(--instagram-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .platform-card.instagram.active { 
+            background: var(--instagram-gradient);
+            color: white;
+        }
+        .platform-card.instagram.active i { 
+            background: white;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .platform-card.instagram.active p { color: rgba(255,255,255,0.9); }
+
+        .platform-card.tiktok i { 
+            color: var(--tiktok-color);
+            text-shadow: 2px 2px 4px rgba(37, 244, 238, 0.3);
+        }
+        .platform-card.tiktok.active { 
+            background: var(--tiktok-gradient);
+            color: white;
+        }
+        .platform-card.tiktok.active i { color: white; }
+        .platform-card.tiktok.active p { color: rgba(255,255,255,0.9); }
+
+        .platform-card.facebook i { color: #1877F2; }
+        .platform-card.facebook.active { 
+            background: #1877F2;
+            color: white;
+        }
+        .platform-card.facebook.active i { color: white; }
+        .platform-card.facebook.active p { color: rgba(255,255,255,0.9); }
+
+        .platform-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .platform-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Card Premium */
+        .action-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .action-card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Platform Selector Display Premium */
+        .platform-selector-display {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+        }
+
+        .platform-icon-large {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .platform-icon-large i {
+            font-size: 2.5rem;
+            color: white;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        }
+
+        .platform-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .platform-info p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Template Buttons Premium */
+        .template-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .template-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .template-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .template-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Form Controls Premium */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        /* Generated Content Premium */
+        .generated-content {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 18px;
+            margin: 1.5rem 0;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .content-header h3 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-header h3 i {
+            color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 0.9rem;
+            border-radius: 15px;
+        }
+
+        /* Loading Spinner Premium */
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-right-color: #a363d9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        /* History Section Premium */
+        .history-section {
+            margin-top: 2rem;
+        }
+
+        .history-section h2 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-section h2 i {
+            color: var(--primary-color);
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item:hover {
+            background: var(--light-bg);
+            transform: translateX(5px);
+        }
+
+        .history-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .history-info i {
+            font-size: 1.3rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* Culori pentru iconițele din istoric */
+        .history-info i.fa-youtube { color: #FF0000; }
+        .history-info i.fa-instagram { 
+            background: var(--instagram-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .history-info i.fa-tiktok { 
+            color: var(--tiktok-color);
+            text-shadow: 0 2px 4px rgba(37, 244, 238, 0.3);
+        }
+        .history-info i.fa-facebook { color: #1877F2; }
+
+        .history-details strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-details small {
+            color: var(--text-muted);
+        }
+
+        .empty-history {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2.5rem;
+        }
+
+        .empty-history i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Dark mode adjustments */
+        [data-theme="dark"] .platform-card.tiktok i {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .history-info i.fa-tiktok {
+            color: #ffffff;
+        }
+
+        /* Responsive Premium */
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .template-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .dashboard-main {
+                padding: 0 1rem;
+            }
+            
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+            
+            .platform-selector-display {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .template-buttons {
+                flex-direction: column;
+            }
+            
+            .template-btn {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .history-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-video"></i>
+                <span>ContentCreator Pro</span>
+            </div>
+            
+            <div class="nav-right">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <a href="dashboard.html" class="btn-outline">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <div class="welcome-section">
+            <h1>
+                <i class="fas fa-magic"></i> 
+                Generator Conținut AI
+            </h1>
+            <p>Creează conținut optimizat pentru orice platformă în câteva secunde</p>
+        </div>
+
+        <!-- Platform Selector -->
+        <div class="grid-4">
+            <button class="platform-card youtube active" data-platform="youtube" onclick="selectContentPlatform('youtube')">
+                <i class="fab fa-youtube"></i>
+                <h3>YouTube</h3>
+                <p>Descrieri, titluri, tag-uri</p>
+            </button>
+            
+            <button class="platform-card instagram" data-platform="instagram" onclick="selectContentPlatform('instagram')">
+                <i class="fab fa-instagram"></i>
+                <h3>Instagram</h3>
+                <p>Postări, stories, captions</p>
+            </button>
+            
+            <button class="platform-card tiktok" data-platform="tiktok" onclick="selectContentPlatform('tiktok')">
+                <i class="fab fa-tiktok"></i>
+                <h3>TikTok</h3>
+                <p>Script-uri, descrieri</p>
+            </button>
+            
+            <button class="platform-card facebook" data-platform="facebook" onclick="selectContentPlatform('facebook')">
+                <i class="fab fa-facebook"></i>
+                <h3>Facebook</h3>
+                <p>Postări, engagement</p>
+            </button>
+        </div>
+
+        <!-- Generator Card -->
+        <div class="grid-1">
+            <div class="action-card">
+                <!-- Platformă selectată -->
+                <div class="platform-selector-display">
+                    <div class="platform-icon-large" id="selectedPlatformIcon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="platform-info">
+                        <h2 id="selectedPlatformTitle">YouTube</h2>
+                        <p id="selectedPlatformDesc">Generează descrieri, titluri și tag-uri</p>
+                    </div>
+                </div>
+
+                <!-- Template Selector -->
+                <div class="template-buttons">
+                    <button class="template-btn active" data-template="description" onclick="selectTemplate('description')">
+                        <i class="fas fa-align-left"></i> Descriere
+                    </button>
+                    <button class="template-btn" data-template="title" onclick="selectTemplate('title')">
+                        <i class="fas fa-heading"></i> Titlu
+                    </button>
+                    <button class="template-btn" data-template="tags" onclick="selectTemplate('tags')">
+                        <i class="fas fa-tags"></i> Tag-uri
+                    </button>
+                    <button class="template-btn" data-template="script" onclick="selectTemplate('script')">
+                        <i class="fas fa-scroll"></i> Script
+                    </button>
+                </div>
+
+                <!-- Input Form -->
+                <div class="form-group">
+                    <label><i class="fas fa-lightbulb" style="color: var(--primary-color);"></i> Subiect / Idee principală</label>
+                    <input type="text" id="contentTopic" class="form-control" placeholder="Ex: Rețetă de clătite, Review iPhone, Sfaturi călătorie...">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-volume-control-phone" style="color: var(--primary-color);"></i> Ton</label>
+                    <select id="contentTone" class="form-control">
+                        <option value="professional">Profesional</option>
+                        <option value="casual">Relaxat</option>
+                        <option value="funny">Amuzant</option>
+                        <option value="inspirational">Inspirațional</option>
+                        <option value="educational">Educațional</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-key" style="color: var(--primary-color);"></i> Cuvinte cheie (opțional)</label>
+                    <input type="text" id="contentKeywords" class="form-control" placeholder="separate prin virgulă">
+                </div>
+
+                <!-- Generate Button -->
+                <button class="btn-primary" onclick="generateContent()" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-magic"></i> Generează conținut
+                </button>
+
+                <!-- Results -->
+                <div id="contentResults" style="display: none;">
+                    <div class="content-header">
+                        <h3>
+                            <i class="fas fa-sparkles" style="color: var(--primary-color);"></i> 
+                            Conținut generat
+                        </h3>
+                        <button class="btn-outline" onclick="copyGeneratedContent()">
+                            <i class="far fa-copy"></i> Copiază
+                        </button>
+                    </div>
+                    
+                    <div class="generated-content" id="generatedContent"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-outline" onclick="saveGeneratedContent()">
+                            <i class="far fa-bookmark"></i> Salvează
+                        </button>
+                        <button class="btn-outline" onclick="regenerateContent()">
+                            <i class="fas fa-sync-alt"></i> Regenerare
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="contentLoading" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p style="color: var(--text-muted);">Se generează conținut cu AI...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h2>
+                <i class="fas fa-history"></i>
+                Generări recente
+            </h2>
+            <div class="action-card" style="padding: 1rem;">
+                <div id="historyList">
+                    <!-- Istoricul va fi populat dinamic -->
+                    <div class="empty-history">
+                        <i class="fas fa-history"></i>
+                        <p>Nu ai nicio generare recentă</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ===== VARIABILE GLOBALE =====
+        let currentPlatform = 'youtube';
+        let currentTemplate = 'description';
+        let currentGeneratedContent = '';
+        let generationHistory = JSON.parse(localStorage.getItem('contentHistory') || '[]');
+
+        // ===== FUNCȚII PENTRU TEMĂ =====
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (!themeToggle) return;
+            
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        function toggleTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+
+        // ===== FUNCȚII PENTRU GENERATOR =====
+        function selectContentPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Actualizează iconița și textul
+            const icon = document.querySelector('#selectedPlatformIcon i');
+            const title = document.getElementById('selectedPlatformTitle');
+            const desc = document.getElementById('selectedPlatformDesc');
+            
+            icon.className = `fab fa-${platform}`;
+            
+            const platforms = {
+                youtube: { title: 'YouTube', desc: 'Generează descrieri, titluri și tag-uri' },
+                instagram: { title: 'Instagram', desc: 'Generează postări, stories și captions' },
+                tiktok: { title: 'TikTok', desc: 'Generează script-uri și descrieri' },
+                facebook: { title: 'Facebook', desc: 'Generează postări și engagement' }
+            };
+            
+            title.textContent = platforms[platform].title;
+            desc.textContent = platforms[platform].desc;
+            
+            // Evidențiază platforma selectată
+            document.querySelectorAll('.platform-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`.platform-card[data-platform="${platform}"]`).classList.add('active');
+        }
+
+        function selectTemplate(template) {
+            currentTemplate = template;
+            
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.template-btn[data-template="${template}"]`).classList.add('active');
+        }
+
+        async function generateContent() {
+            const topic = document.getElementById('contentTopic').value.trim();
+            
+            if (!topic) {
+                showNotification('Te rugăm să introduci un subiect!', 'error');
+                return;
+            }
+
+            // Arată loading
+            document.getElementById('contentLoading').style.display = 'block';
+            document.getElementById('contentResults').style.display = 'none';
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const tone = document.getElementById('contentTone').value;
+                const keywords = document.getElementById('contentKeywords').value;
+                
+                // Generează conținut în funcție de platformă și template
+                let generated = generateContentByPlatform(topic, tone, keywords);
+                
+                currentGeneratedContent = generated;
+                document.getElementById('generatedContent').textContent = generated;
+                
+                // Salvează în istoric
+                saveToHistory(topic, generated);
+                
+                document.getElementById('contentResults').style.display = 'block';
+                showNotification('✅ Conținut generat cu succes!');
+            } catch (error) {
+                showNotification('❌ A apărut o eroare!', 'error');
+            } finally {
+                document.getElementById('contentLoading').style.display = 'none';
+            }
+        }
+
+        function generateContentByPlatform(topic, tone, keywords) {
+            const platform = currentPlatform;
+            const template = currentTemplate;
+            
+            // Template pentru YouTube
+            if (platform === 'youtube') {
+                if (template === 'description') {
+                    return `📹 ${topic.toUpperCase()} - Tot ce trebuie să știi
+
+Bun venit la un nou video! Azi vom vorbi despre ${topic} și îți voi arăta tot ce trebuie să știi.
+
+📌 Ce vei învăța:
+• Introducere în ${topic}
+• Sfaturi și trucuri utile
+• Greșeli comune de evitat
+• Exemple practice
+
+⏱️ TIMPURI:
+0:00 - Intro
+1:30 - Ce este ${topic}?
+3:45 - Cum să folosești
+6:20 - Sfaturi utile
+9:00 - Concluzii
+
+🔔 Abonează-te pentru mai mult conținut!
+
+#${topic.replace(/\s+/g, '')} #tutorial #sfaturi`;
+                } else if (template === 'title') {
+                    const titles = [
+                        `${topic} - Ghid complet pentru începători`,
+                        `Cum să ${topic} în 5 pași simpli`,
+                        `${topic}: Tot ce trebuie să știi`,
+                        `Secretele ${topic} pe care nu le știai`,
+                        `${topic} pentru începători - Tutorial 2024`
+                    ];
+                    return titles[Math.floor(Math.random() * titles.length)];
+                } else if (template === 'tags') {
+                    const words = topic.toLowerCase().split(' ');
+                    return words.map(w => w.replace(/[^a-z0-9]/g, '')).join(', ') + ', tutorial, ghid, sfaturi, cum să, invata';
+                }
+            }
+            
+            // Template pentru Instagram
+            if (platform === 'instagram') {
+                if (template === 'description') {
+                    return `✨ ${topic} - Inspirația zilei
+
+Salutare! Azi vreau să vorbesc despre ${topic} și cum ne poate inspira.
+
+📌 Salvează această postare pentru mai târziu!
+👉 Scrie în comentii ce părere ai
+
+#${topic.replace(/\s+/g, '')} #inspiratie #motivatie`;
+                }
+            }
+            
+            // Template pentru TikTok
+            if (platform === 'tiktok') {
+                if (template === 'script') {
+                    return `🎵 POV: Când descoperi ${topic} pentru prima dată
+
+(1) Intro rapid - 3 secunde
+(2) Reacție surprinzătoare - 5 secunde
+(3) Explicație rapidă - 10 secunde
+(4) Final cu twist - 5 secunde
+
+#fyp #foryou #${topic.replace(/\s+/g, '')}`;
+                }
+            }
+            
+            // Default
+            return `Conținut generat pentru ${platform} - ${topic}\n\nAici va apărea conținutul generat de AI.`;
+        }
+
+        function copyGeneratedContent() {
+            if (!currentGeneratedContent) return;
+            navigator.clipboard.writeText(currentGeneratedContent);
+            showNotification('📋 Conținut copiat!');
+        }
+
+        function saveGeneratedContent() {
+            if (!currentGeneratedContent) return;
+            
+            const saved = JSON.parse(localStorage.getItem('savedContent') || '[]');
+            saved.push({
+                id: Date.now(),
+                platform: currentPlatform,
+                template: currentTemplate,
+                content: currentGeneratedContent,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('savedContent', JSON.stringify(saved));
+            
+            showNotification('💾 Conținut salvat!');
+        }
+
+        function regenerateContent() {
+            generateContent();
+        }
+
+        function saveToHistory(topic, content) {
+            generationHistory.unshift({
+                id: Date.now(),
+                platform: currentPlatform,
+                template: currentTemplate,
+                topic: topic,
+                content: content.substring(0, 50) + '...',
+                date: new Date().toISOString()
+            });
+            
+            if (generationHistory.length > 5) {
+                generationHistory.pop();
+            }
+            
+            localStorage.setItem('contentHistory', JSON.stringify(generationHistory));
+            updateHistoryList();
+        }
+
+        function updateHistoryList() {
+            const container = document.getElementById('historyList');
+            if (!container) return;
+            
+            if (generationHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fas fa-history"></i>
+                        <p>Nu ai nicio generare recentă</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = generationHistory.map(item => {
+                // Determinăm culoarea iconiței în funcție de platformă
+                let iconClass = `fab fa-${item.platform}`;
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <i class="${iconClass}"></i>
+                            <div class="history-details">
+                                <strong>${item.topic}</strong>
+                                <small>${new Date(item.date).toLocaleDateString()} • ${item.template}</small>
+                            </div>
+                        </div>
+                        <button class="btn-outline" onclick="loadHistoryContent('${item.id}')" style="padding: 0.5rem 1rem;">
+                            <i class="fas fa-redo-alt"></i> Încarcă
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadHistoryContent(id) {
+            const item = generationHistory.find(i => i.id == id);
+            if (item) {
+                showNotification('📂 Conținut încărcat din istoric');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? 'linear-gradient(135deg, var(--success-color), #00cec9)' : 'linear-gradient(135deg, var(--danger-color), #e17055)'};
+                color: white;
+                padding: 14px 28px;
+                border-radius: 50px;
+                font-size: 0.95rem;
+                font-weight: 500;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                border: 1px solid rgba(255,255,255,0.1);
+                backdrop-filter: blur(10px);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+
+        // ===== INITIALIZARE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            selectContentPlatform('youtube');
+            selectTemplate('description');
+            updateHistoryList();
+            
+            // Adăugăm efect de shimmer la încărcare
+            const cards = document.querySelectorAll('.action-card');
+            cards.forEach(card => {
+                card.style.animation = 'float 6s ease-in-out infinite';
+            });
+        });
+    </script>
+</body>
+</html>

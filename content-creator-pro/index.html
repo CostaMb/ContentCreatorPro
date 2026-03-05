@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentCreator Pro - Platforma All-in-One pentru Creatori</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Boxicons pentru iconițe premium -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- AOS pentru animații -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a4e6;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --dark-bg: #1e1e2e;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e9ecef;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            
+            /* Culori oficiale platforme */
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --tiktok-color: #000000;
+            --tiktok-gradient: linear-gradient(145deg, #25f4ee 0%, #fe2c55 50%, #000000 100%);
+            --youtube-color: #ff0000;
+            --facebook-color: #1877f2;
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #f8f9fa;
+            --text-muted: #b2bec3;
+            --border-color: #2d3a5e;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            --tiktok-color: #ffffff;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-right-color: #a363d9;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation Premium */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #a363d9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 30px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            border: none;
+        }
+
+        .lang-btn img {
+            width: 20px;
+            height: 15px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .theme-toggle {
+            background: var(--border-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7b6ced, var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::after {
+            left: 100%;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), #a363d9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            position: relative;
+            animation: slideInRight 0.8s ease;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 30px;
+            box-shadow: var(--hover-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Platform Cards Premium */
+        .platforms {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .platform-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0s; }
+        .platform-card:nth-child(2) { animation-delay: 0.2s; }
+        .platform-card:nth-child(3) { animation-delay: 0.4s; }
+        .platform-card:nth-child(4) { animation-delay: 0.6s; }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .platform-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .platform-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .platform-card.youtube i { color: #FF0000; }
+        .platform-card.instagram i { 
+            background: var(--instagram-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .platform-card.tiktok i { 
+            color: var(--tiktok-color);
+            text-shadow: 2px 2px 4px rgba(37, 244, 238, 0.3);
+        }
+        .platform-card.facebook i { color: #1877F2; }
+
+        [data-theme="dark"] .platform-card.tiktok i {
+            color: #ffffff;
+        }
+
+        .platform-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Follow Button Premium */
+        .follow-btn {
+            background: transparent;
+            border: 2px solid;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .follow-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .follow-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .follow-btn i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .follow-btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .follow-btn.following {
+            background: linear-gradient(135deg, var(--success-color), #00cec9);
+            color: white;
+            border: none;
+        }
+
+        /* Culori follow button per platformă */
+        .platform-card.youtube .follow-btn {
+            border-color: #FF0000;
+            color: #FF0000;
+        }
+
+        .platform-card.youtube .follow-btn:hover {
+            background: #FF0000;
+            color: white;
+        }
+
+        .platform-card.instagram .follow-btn {
+            border-color: #E4405F;
+            color: #E4405F;
+        }
+
+        .platform-card.instagram .follow-btn:hover {
+            background: #E4405F;
+            color: white;
+        }
+
+        .platform-card.tiktok .follow-btn {
+            border-color: var(--tiktok-color);
+            color: var(--tiktok-color);
+        }
+
+        .platform-card.tiktok .follow-btn:hover {
+            background: var(--tiktok-color);
+            color: white;
+        }
+
+        .platform-card.facebook .follow-btn {
+            border-color: #1877F2;
+            color: #1877F2;
+        }
+
+        .platform-card.facebook .follow-btn:hover {
+            background: #1877F2;
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            top: 30px;
+            right: -20px;
+            font-size: 2rem;
+            color: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            padding: 0.5rem 3rem;
+            transform: rotate(45deg);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-card li i {
+            width: 20px;
+        }
+
+        .pricing-card li i.fa-check {
+            color: var(--success-color);
+        }
+
+        .pricing-card li i.fa-times {
+            color: var(--danger-color);
+        }
+
+        .pricing-card li.disabled {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* Testimonials Premium */
+        .testimonials {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .testimonial-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid var(--primary-color);
+            padding: 3px;
+        }
+
+        .testimonial-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-platform {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .testimonial-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .rating {
+            color: gold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        /* Social Links for Testimonials */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        .social-link.instagram {
+            background: var(--instagram-gradient);
+        }
+
+        .social-link.tiktok {
+            background: linear-gradient(145deg, #25f4ee, #fe2c55);
+        }
+
+        .social-link.facebook {
+            background: #1877F2;
+        }
+
+        .social-link.youtube {
+            background: #FF0000;
+        }
+
+        /* CTA Section */
+        .cta {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-radius: 50px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            padding: 1rem 3rem;
+        }
+
+        .cta .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-section .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section li:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 2rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Modal Premium */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            animation: slideUp 0.5s ease;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--danger-color);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .modal-footer {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .modal-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 10000;
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color), #00cec9);
+            color: white;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger-color), #e17055);
+            color: white;
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .platform-grid,
+            .features-grid,
+            .pricing-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .auth-buttons span {
+                display: none;
+            }
+            
+            .language-selector {
+                display: none;
+            }
+            
+            .platform-grid,
+            .features-grid,
+            .pricing-grid,
+            .testimonials-grid,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-section .logo {
+                justify-content: center;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <p>Se încarcă ContentCreator Pro...</p>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-video"></i>
+                <span>ContentCreator Pro</span>
+            </div>
+            
+            <div class="nav-right">
+                <!-- Language Switcher -->
+                <div class="language-selector">
+                    <button class="lang-btn active" onclick="switchLanguage('ro')">
+                        <img src="https://flagcdn.com/w20/ro.png" alt="RO"> Română
+                    </button>
+                    <button class="lang-btn" onclick="switchLanguage('en')">
+                        <img src="https://flagcdn.com/w20/us.png" alt="EN"> English
+                    </button>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <!-- Auth Buttons -->
+                <div class="auth-buttons">
+                    <button class="btn-outline" onclick="showLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+                    </button>
+                    <button class="btn-primary" onclick="showRegisterModal()">
+                        <i class="fas fa-user-plus"></i> <span>Register</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content" data-aos="fade-right">
+            <h1>Transformă-ți ideile în <span class="gradient-text">conținut viral</span></h1>
+            <p>Platforma all-in-one pentru creatori de conținut. Generează text, hashtag-uri, optimizare SEO și multe altele pentru toate platformele sociale.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Creatori activi</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">1M+</span>
+                    <span class="stat-label">Postări generate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Satisfacție</span>
+                </div>
+            </div>
+            
+            <div class="hero-buttons">
+                <button class="btn-primary btn-large" onclick="window.location.href='dashboard.html'">
+                    Începe gratuit <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn-outline btn-large" onclick="scrollToFeatures()">
+                    Află mai multe
+                </button>
+            </div>
+        </div>
+        
+        <div class="hero-image" data-aos="fade-left">
+            <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400&q=80" alt="Content Creator">
+        </div>
+    </section>
+
+    <!-- Platform Cards -->
+    <section class="platforms">
+        <h2 class="section-title" data-aos="fade-up">Urmărește-mă pe <span class="gradient-text">platformele sociale</span></h2>
+        
+        <div class="platform-grid">
+            <!-- YouTube Card -->
+            <div class="platform-card youtube" data-aos="flip-left" data-aos-delay="100">
+                <i class="fab fa-youtube"></i>
+                <h3>YouTube</h3>
+                <p>Abonează-te pentru tutoriale și conținut exclusiv</p>
+                <button class="follow-btn" onclick="followPlatform('youtube', this)">
+                    <i class="fab fa-youtube"></i>
+                    <span>Follow</span>
+                </button>
+            </div>
+            
+            <!-- Instagram Card -->
+            <div class="platform-card instagram" data-aos="flip-left" data-aos-delay="200">
+                <i class="fab fa-instagram"></i>
+                <h3>Instagram</h3>
+                <p>Urmărește-mă pentru stories și postări zilnice</p>
+                <button class="follow-btn" onclick="followPlatform('instagram', this)">
+                    <i class="fab fa-instagram"></i>
+                    <span>Follow</span>
+                </button>
+            </div>
+            
+            <!-- TikTok Card -->
+            <div class="platform-card tiktok" data-aos="flip-left" data-aos-delay="300">
+                <i class="fab fa-tiktok"></i>
+                <h3>TikTok</h3>
+                <p>Videoclipuri virale și trending sounds</p>
+                <button class="follow-btn" onclick="followPlatform('tiktok', this)">
+                    <i class="fab fa-tiktok"></i>
+                    <span>Follow</span>
+                </button>
+            </div>
+            
+            <!-- Facebook Card -->
+            <div class="platform-card facebook" data-aos="flip-left" data-aos-delay="400">
+                <i class="fab fa-facebook"></i>
+                <h3>Facebook</h3>
+                <p>Comunitatea mea oficială pe Facebook</p>
+                <button class="follow-btn" onclick="followPlatform('facebook', this)">
+                    <i class="fab fa-facebook"></i>
+                    <span>Follow</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title" data-aos="fade-up">Tool-uri <span class="gradient-text">profesionale</span> pentru creatori</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <h3>Generator Text AI</h3>
+                <p>Generează text optimizat pentru fiecare platformă în parte</p>
+            </div>
+            
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-hashtag"></i>
+                </div>
+                <h3>Hashtag Generator</h3>
+                <p>Hashtag-uri populare și specifice nișei tale</p>
+            </div>
+            
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>SEO Optimizer</h3>
+                <p>Optimizează-ți conținutul pentru căutări</p>
+            </div>
+            
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Idei Conținut</h3>
+                <p>Generare idei bazate pe trend-uri actuale</p>
+            </div>
+            
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="500">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <h3>Content Planner</h3>
+                <p>Planifică și programează postările</p>
+            </div>
+            
+            <div class="feature-card" data-aos="zoom-in" data-aos-delay="600">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Analytics</h3>
+                <p>Analizează performanța conținutului</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title" data-aos="fade-up">Cum <span class="gradient-text">funcționează</span></h2>
+        
+        <div class="steps">
+            <div class="step" data-aos="fade-right" data-aos-delay="100">
+                <div class="step-number">1</div>
+                <h3>Alege platforma</h3>
+                <p>Selectează platforma pentru care vrei să creezi conținut</p>
+            </div>
+            
+            <div class="step" data-aos="fade-right" data-aos-delay="200">
+                <div class="step-number">2</div>
+                <h3>Introdu subiectul</h3>
+                <p>Spune-ne despre ce vrei să postezi</p>
+            </div>
+            
+            <div class="step" data-aos="fade-right" data-aos-delay="300">
+                <div class="step-number">3</div>
+                <h3>Generează</h3>
+                <p>AI-ul nostru generează conținut optimizat</p>
+            </div>
+            
+            <div class="step" data-aos="fade-right" data-aos-delay="400">
+                <div class="step-number">4</div>
+                <h3>Publică</h3>
+                <p>Copiază și publică pe platforma ta preferată</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <h2 class="section-title" data-aos="fade-up">Planuri <span class="gradient-text">flexibile</span></h2>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card" data-aos="zoom-in" data-aos-delay="100">
+                <h3>Gratuit</h3>
+                <div class="price">0<span>/lună</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 2 generații/zi</li>
+                    <li><i class="fas fa-check"></i> Toate platformele</li>
+                    <li><i class="fas fa-check"></i> Hashtag generator</li>
+                    <li><i class="fas fa-check"></i> Suport prin email</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Analytics avansat</li>
+                    <li class="disabled"><i class="fas fa-times"></i> Content planner</li>
+                </ul>
+                <button class="btn-outline" onclick="window.location.href='dashboard.html'">Începe gratuit</button>
+            </div>
+            
+            <div class="pricing-card popular" data-aos="zoom-in" data-aos-delay="200">
+                <div class="popular-badge">Popular</div>
+                <h3>Pro</h3>
+                <div class="price">2£<span>/lună</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Generări nelimitate</li>
+                    <li><i class="fas fa-check"></i> Toate platformele</li>
+                    <li><i class="fas fa-check"></i> Hashtag generator avansat</li>
+                    <li><i class="fas fa-check"></i> SEO optimizer</li>
+                    <li><i class="fas fa-check"></i> Analytics avansat</li>
+                    <li><i class="fas fa-check"></i> Content planner</li>
+                </ul>
+                <button class="btn-primary" onclick="window.location.href='dashboard.html'">Alege Pro</button>
+            </div>
+            
+            <div class="pricing-card" data-aos="zoom-in" data-aos-delay="300">
+                <h3>Business</h3>
+                <div class="price">9£<span>/lună</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Tot din Pro</li>
+                    <li><i class="fas fa-check"></i> Echipe nelimitate</li>
+                    <li><i class="fas fa-check"></i> API access</li>
+                    <li><i class="fas fa-check"></i> Suport prioritar</li>
+                    <li><i class="fas fa-check"></i> Training personalizat</li>
+                    <li><i class="fas fa-check"></i> Brand customizare</li>
+                </ul>
+                <button class="btn-outline" onclick="window.location.href='dashboard.html'">Contactează-ne</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title" data-aos="fade-up">Urmărește-mă pe <span class="gradient-text">social media</span></h2>
+        
+        <div class="testimonials-grid">
+            <!-- Dj Costy Mb - Toate platformele -->
+            <div class="testimonial-card" data-aos="flip-up" data-aos-delay="100">
+                <img src="https://yt3.googleusercontent.com/ytc/AIdro_mM05yqM4vCLZNfD37UMlLJdxrYxRuqaXBSDDaNYM8tBw=s160-c-k-c0x00ffffff-no-rj" alt="Dj Costy Mb">
+                <h4>Dj Costy Mb</h4>
+                <p class="user-platform">Content Creator</p>
+                <p class="testimonial-text">"Folosesc ContentCreator Pro pentru toate postările mele. Tool-urile sunt fantastice!"</p>
+                <div class="rating">★★★★★</div>
+                <div class="social-links">
+                    <a href="https://youtube.com/@constantinolaru8280" class="social-link youtube" target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://instagram.com/djcosty_mb" class="social-link instagram" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://tiktok.com/@djcosty_mb" class="social-link tiktok" target="_blank">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://facebook.com/MbOlyCo" class="social-link facebook" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- YouTube Channel -->
+            <div class="testimonial-card" data-aos="flip-up" data-aos-delay="200">
+                <i class="fab fa-youtube" style="font-size: 3rem; color: #FF0000; margin-bottom: 1rem;"></i>
+                <h4>YouTube</h4>
+                <p class="user-platform">@constantinolaru8280</p>
+                <p class="testimonial-text">"Abonează-te pentru tutoriale, review-uri și conținut exclusiv!"</p>
+                <div class="social-links">
+                    <a href="https://youtube.com/@constantinolaru8280" class="social-link youtube" target="_blank">
+                        <i class="fab fa-youtube"></i> Subscribe
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Instagram Profile -->
+            <div class="testimonial-card" data-aos="flip-up" data-aos-delay="300">
+                <i class="fab fa-instagram" style="font-size: 3rem; background: var(--instagram-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;"></i>
+                <h4>Instagram</h4>
+                <p class="user-platform">@djkostu_mb</p>
+                <p class="testimonial-text">"Urmărește-mă pentru stories zilnice și postări exclusive!"</p>
+                <div class="social-links">
+                    <a href="https://instagram.com/djcosty_mb" class="social-link instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> Follow
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" data-aos="zoom-in">
+        <div class="cta-content">
+            <h2>Gata să-ți duci conținutul la următorul nivel?</h2>
+            <p>Începe gratuit astăzi. Nu ai nevoie de card de credit.</p>
+            <button class="btn-primary btn-large" onclick="window.location.href='dashboard.html'">
+                Creează-ți cont gratuit
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="logo">
+                    <i class="fas fa-video"></i>
+                    <span>ContentCreator Pro</span>
+                </div>
+                <p>Platforma all-in-one pentru creatori de conținut</p>
+                <div class="social-links" style="margin-top: 1rem; justify-content: flex-start;">
+                    <a href="https://youtube.com/@constantinolaru8280" class="social-link youtube" target="_blank">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://instagram.com/djcosty_mb" class="social-link instagram" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://tiktok.com/@djcosty_mb" class="social-link tiktok" target="_blank">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://facebook.com/MbOlyCo" class="social-link facebook" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Platforme</h4>
+                <ul>
+                    <li onclick="window.open('https://youtube.com/@constantinolaru8280', '_blank')">YouTube</li>
+                    <li onclick="window.open('https://instagram.com/djcosty_mb', '_blank')">Instagram</li>
+                    <li onclick="window.open('https://tiktok.com/@djcosty_mb', '_blank')">TikTok</li>
+                    <li onclick="window.open('https://facebook.com/MbOlyCo', '_blank')">Facebook</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Tool-uri</h4>
+                <ul>
+                    <li onclick="window.location.href='#'">Generator Text</li>
+                    <li onclick="window.location.href='#'">Hashtag Generator</li>
+                    <li onclick="window.location.href='#'">SEO Optimizer</li>
+                    <li onclick="window.location.href='#'">Content Planner</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li onclick="window.location.href='#'">Termeni și condiții</li>
+                    <li onclick="window.location.href='#'">Politica de confidențialitate</li>
+                    <li onclick="window.location.href='#'">Cookie-uri</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 ContentCreator Pro by MB. Toate drepturile rezervate.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Autentificare</h2>
+            
+            <form onsubmit="handleLogin(event); return false;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Parolă</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-full">Autentificare</button>
+            </form>
+            
+            <p class="modal-footer">
+                Nu ai cont? <a href="#" onclick="showRegisterModal(); return false;">Înregistrează-te</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Înregistrare</h2>
+            
+            <form onsubmit="handleRegister(event); return false;">
+                <div class="form-group">
+                    <label>Nume</label>
+                    <input type="text" id="registerName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Parolă</label>
+                    <input type="password" id="registerPassword" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirmă parola</label>
+                    <input type="password" id="registerConfirmPassword" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-full">Înregistrare</button>
+            </form>
+            
+            <p class="modal-footer">
+                Ai deja cont? <a href="#" onclick="showLoginModal(); return false;">Autentifică-te</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ===== VARIABILE GLOBALE =====
+        let currentLanguage = 'ro';
+        
+        // Profilele tale sociale
+        const yourProfiles = {
+            youtube: '@constantinolaru8280',
+            instagram: 'djcosty_mb',
+            tiktok: '@djcosty_mb',
+            facebook: 'MbOlyCo'
+        };
+
+        // ===== FUNCȚII PENTRU LOADING =====
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 500);
+        });
+
+        // ===== FUNCȚII PENTRU TEMĂ =====
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (!themeToggle) return;
+            
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        function toggleTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                showNotification('🌙 Tema deschisă activată', 'info');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                showNotification('🌞 Tema întunecată activată', 'info');
+            }
+        }
+
+        // ===== FUNCȚII PENTRU FOLLOW =====
+        function followPlatform(platform, button) {
+            const isFollowing = button.classList.contains('following');
+            
+            if (isFollowing) {
+                button.classList.remove('following');
+                button.innerHTML = `<i class="fab fa-${platform}"></i><span>Follow</span>`;
+                showNotification(`Nu mai urmărești pagina de ${platform}`, 'info');
+            } else {
+                button.classList.add('following');
+                button.innerHTML = `<i class="fas fa-check"></i><span>Following</span>`;
+                showNotification(`Îți mulțumesc că mă urmărești pe ${platform}! ❤️`, 'success');
+                
+                // Redirecționează către profilul real
+                setTimeout(() => {
+                    let url = '';
+                    switch(platform) {
+                        case 'youtube':
+                            url = `https://youtube.com/${yourProfiles.youtube}`;
+                            break;
+                        case 'instagram':
+                            url = `https://instagram.com/${yourProfiles.instagram}`;
+                            break;
+                        case 'tiktok':
+                            url = `https://tiktok.com/${yourProfiles.tiktok}`;
+                            break;
+                        case 'facebook':
+                            url = `https://facebook.com/${yourProfiles.facebook}`;
+                            break;
+                    }
+                    window.open(url, '_blank');
+                }, 1000);
+            }
+        }
+
+        // ===== FUNCȚII PENTRU MODAL =====
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showRegisterModal() {
+            closeModal('loginModal');
+            document.getElementById('registerModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Închide modalul la click în afară
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // ===== FUNCȚII PENTRU AUTENTIFICARE =====
+        function handleLogin(event) {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                localStorage.setItem('isLoggedIn', 'true');
+                showNotification('Autentificare reușită! Redirecționare...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            }
+            
+            return false;
+        }
+
+        function handleRegister(event) {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Parolele nu coincid!', 'error');
+                return false;
+            }
+            
+            if (name && email && password) {
+                localStorage.setItem('isLoggedIn', 'true');
+                showNotification('Cont creat cu succes! Redirecționare...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            }
+            
+            return false;
+        }
+
+        // ===== FUNCȚII PENTRU NOTIFICĂRI =====
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+
+        // ===== FUNCȚII PENTRU LIMBĂ =====
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.closest('.lang-btn').classList.add('active');
+            showNotification(`Limba schimbată în ${lang === 'ro' ? 'Română' : 'English'}`, 'info');
+        }
+
+        // ===== FUNCȚII PENTRU SCROLL =====
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===== INITIALIZARE AOS =====
+        function initAOS() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    offset: 100
+                });
+            }
+        }
+
+        // ===== INITIALIZARE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            initAOS();
+            
+            // Verificăm dacă utilizatorul e deja autentificat
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                const authButtons = document.querySelector('.auth-buttons');
+                if (authButtons) {
+                    authButtons.innerHTML = `
+                        <button class="btn-primary" onclick="window.location.href='dashboard.html'">
+                            <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+                        </button>
+                    `;
+                }
+            }
+        });
+    </script>
+
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>

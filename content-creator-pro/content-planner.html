@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Planner - Martie 2026</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a4e6;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e9ecef;
+            
+            /* Culori platforme */
+            --instagram: #E4405F;
+            --youtube: #FF0000;
+            --tiktok: #000000;
+            --facebook: #1877F2;
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #f8f9fa;
+            --text-muted: #b2bec3;
+            --border-color: #2d3a5e;
+            --tiktok: #ffffff;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        /* Container principal */
+        .planner-container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .title i {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .title .badge {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .theme-toggle {
+            background: var(--border-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 45%;
+            background: linear-gradient(90deg, var(--primary-color), #8b7bf5);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Mini calendar navigation */
+        .mini-calendar-nav {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .mini-month {
+            text-align: center;
+            padding: 0.3rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .mini-month:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .mini-month.current {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Calendar navigation */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .month-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .month-display h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .month-display .year {
+            color: var(--text-muted);
+            font-weight: normal;
+            font-size: 1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* View toggle */
+        .view-toggle {
+            display: flex;
+            gap: 0.3rem;
+            margin-left: 1rem;
+        }
+
+        .view-btn {
+            padding: 0.2rem 0.8rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Platform filters */
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn i {
+            font-size: 0.8rem;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .filter-btn.instagram.active { background: var(--instagram); }
+        .filter-btn.youtube.active { background: var(--youtube); }
+        .filter-btn.tiktok.active { background: var(--tiktok); }
+        .filter-btn.facebook.active { background: var(--facebook); }
+
+        /* Weekdays */
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 0.4rem;
+        }
+
+        /* Calendar grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 0.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+        }
+
+        .day-number {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .today {
+            background: rgba(108, 92, 231, 0.1);
+            border: 2px solid var(--primary-color);
+        }
+
+        .today .day-number {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .other-month {
+            opacity: 0.4;
+        }
+
+        /* Platform icons in calendar */
+        .day-platforms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem;
+            margin-top: auto;
+        }
+
+        .platform-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.4rem;
+        }
+
+        .platform-icon.instagram { background: var(--instagram); color: white; }
+        .platform-icon.youtube { background: var(--youtube); color: white; }
+        .platform-icon.tiktok { background: var(--tiktok); color: white; }
+        .platform-icon.facebook { background: var(--facebook); color: white; }
+
+        /* Post count badge */
+        .post-count {
+            position: absolute;
+            top: 0.2rem;
+            right: 0.2rem;
+            background: var(--primary-color);
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        /* Tooltip */
+        .calendar-day {
+            position: relative;
+        }
+
+        .calendar-day .tooltip {
+            visibility: hidden;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10;
+            margin-bottom: 6px;
+        }
+
+        .calendar-day:hover .tooltip {
+            visibility: visible;
+        }
+
+        /* Posts section */
+        .posts-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        .posts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .posts-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .posts-header h3 i {
+            color: var(--primary-color);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .post-card {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .post-card:hover {
+            transform: translateX(3px);
+            border-color: var(--primary-color);
+        }
+
+        .post-platform {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .post-platform.instagram { background: rgba(228, 64, 95, 0.1); color: var(--instagram); }
+        .post-platform.youtube { background: rgba(255, 0, 0, 0.1); color: var(--youtube); }
+        .post-platform.tiktok { background: rgba(0, 0, 0, 0.1); color: var(--tiktok); }
+        .post-platform.facebook { background: rgba(24, 119, 242, 0.1); color: var(--facebook); }
+
+        .post-content {
+            flex: 1;
+        }
+
+        .post-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .tag {
+            padding: 0.1rem 0.4rem;
+            background: var(--card-bg);
+            border-radius: 4px;
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .post-actions button {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .post-actions button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .add-post-btn {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            border: 2px dashed var(--border-color);
+            background: transparent;
+            border-radius: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .add-post-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mini-calendar-nav {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="planner-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">
+                <i class="fas fa-calendar-alt"></i>
+                <h1>Content Planner <span class="badge">2026</span></h1>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">24</div>
+                <div class="stat-label">
+                    <i class="fas fa-calendar-check" style="color: var(--primary-color);"></i>
+                    Postări programate
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">16</div>
+                <div class="stat-label">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    Publicate
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">
+                    <i class="fas fa-hourglass-half" style="color: var(--warning-color);"></i>
+                    În așteptare
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4</div>
+                <div class="stat-label">
+                    <i class="fas fa-globe" style="color: var(--secondary-color);"></i>
+                    Platforme active
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span>Progres lunar</span>
+                <span>45% completat</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 45%"></div>
+            </div>
+        </div>
+
+        <!-- Mini Calendar Navigation -->
+        <div class="mini-calendar-nav">
+            <div class="mini-month" onclick="jumpToMonth(0)">Ian</div>
+            <div class="mini-month" onclick="jumpToMonth(1)">Feb</div>
+            <div class="mini-month current" onclick="jumpToMonth(2)">Mar</div>
+            <div class="mini-month" onclick="jumpToMonth(3)">Apr</div>
+            <div class="mini-month" onclick="jumpToMonth(4)">Mai</div>
+            <div class="mini-month" onclick="jumpToMonth(5)">Iun</div>
+            <div class="mini-month" onclick="jumpToMonth(6)">Iul</div>
+            <div class="mini-month" onclick="jumpToMonth(7)">Aug</div>
+            <div class="mini-month" onclick="jumpToMonth(8)">Sep</div>
+            <div class="mini-month" onclick="jumpToMonth(9)">Oct</div>
+            <div class="mini-month" onclick="jumpToMonth(10)">Noi</div>
+            <div class="mini-month" onclick="jumpToMonth(11)">Dec</div>
+        </div>
+
+        <!-- Calendar Navigation -->
+        <div class="calendar-nav">
+            <div class="month-display">
+                <h2>Martie <span class="year">2026</span></h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="toggleView('month')">Lunar</button>
+                    <button class="view-btn" onclick="toggleView('week')">Săptămânal</button>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="previousMonth()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn" onclick="nextMonth()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Platform Filters -->
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterPlatform('all')">
+                <i class="fas fa-globe"></i> Toate
+            </button>
+            <button class="filter-btn instagram" onclick="filterPlatform('instagram')">
+                <i class="fab fa-instagram"></i> Instagram
+            </button>
+            <button class="filter-btn youtube" onclick="filterPlatform('youtube')">
+                <i class="fab fa-youtube"></i> YouTube
+            </button>
+            <button class="filter-btn tiktok" onclick="filterPlatform('tiktok')">
+                <i class="fab fa-tiktok"></i> TikTok
+            </button>
+            <button class="filter-btn facebook" onclick="filterPlatform('facebook')">
+                <i class="fab fa-facebook"></i> Facebook
+            </button>
+        </div>
+
+        <!-- Weekdays -->
+        <div class="weekdays">
+            <div class="weekday">Luni</div>
+            <div class="weekday">Marți</div>
+            <div class="weekday">Miercuri</div>
+            <div class="weekday">Joi</div>
+            <div class="weekday">Vineri</div>
+            <div class="weekday">Sâmbătă</div>
+            <div class="weekday">Duminică</div>
+        </div>
+
+        <!-- Calendar Grid - MARTIE 2026 -->
+        <div class="calendar-grid">
+            <!-- Februarie 2026 (zilele din săptămâna precedentă) -->
+            <div class="calendar-day other-month">
+                <span class="day-number">23</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">24</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">25</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">26</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">27</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">28</span>
+                <span class="tooltip">Februarie 2026</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">1</span>
+                <span class="post-count">2</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                </div>
+                <span class="tooltip">2 postări: Instagram, TikTok</span>
+            </div>
+
+            <!-- Săptămâna 1 (2-8 Martie) -->
+            <div class="calendar-day">
+                <span class="day-number">2</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">3</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">4</span>
+                <span class="post-count">1</span>
+                <div class="day-platforms">
+                    <span class="platform-icon youtube"><i class="fab fa-youtube"></i></span>
+                </div>
+                <span class="tooltip">1 postare: YouTube</span>
+            </div>
+            <div class="calendar-day today">
+                <span class="day-number">5</span>
+                <span class="post-count">4</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                    <span class="platform-icon youtube"><i class="fab fa-youtube"></i></span>
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                    <span class="platform-icon facebook"><i class="fab fa-facebook"></i></span>
+                </div>
+                <span class="tooltip">Astăzi - 4 postări (toate platformele)</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">6</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">7</span>
+                <span class="post-count">2</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                    <span class="platform-icon facebook"><i class="fab fa-facebook"></i></span>
+                </div>
+                <span class="tooltip">2 postări: Instagram, Facebook</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">8</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+
+            <!-- Săptămâna 2 (9-15 Martie) -->
+            <div class="calendar-day">
+                <span class="day-number">9</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">10</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">11</span>
+                <span class="post-count">3</span>
+                <div class="day-platforms">
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                </div>
+                <span class="tooltip">3 postări: TikTok(2), Instagram</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">12</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">13</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">14</span>
+                <span class="post-count">1</span>
+                <div class="day-platforms">
+                    <span class="platform-icon youtube"><i class="fab fa-youtube"></i></span>
+                </div>
+                <span class="tooltip">1 postare: YouTube</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">15</span>
+                <span class="post-count">2</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                    <span class="platform-icon facebook"><i class="fab fa-facebook"></i></span>
+                </div>
+                <span class="tooltip">2 postări: Instagram, Facebook</span>
+            </div>
+
+            <!-- Săptămâna 3 (16-22 Martie) -->
+            <div class="calendar-day">
+                <span class="day-number">16</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">17</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">18</span>
+                <span class="post-count">2</span>
+                <div class="day-platforms">
+                    <span class="platform-icon youtube"><i class="fab fa-youtube"></i></span>
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                </div>
+                <span class="tooltip">2 postări: YouTube, TikTok</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">19</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">20</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">21</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">22</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+
+            <!-- Săptămâna 4 (23-29 Martie) -->
+            <div class="calendar-day">
+                <span class="day-number">23</span>
+                <span class="post-count">1</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                </div>
+                <span class="tooltip">1 postare: Instagram</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">24</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">25</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">26</span>
+                <span class="post-count">3</span>
+                <div class="day-platforms">
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                    <span class="platform-icon youtube"><i class="fab fa-youtube"></i></span>
+                    <span class="platform-icon facebook"><i class="fab fa-facebook"></i></span>
+                </div>
+                <span class="tooltip">3 postări: TikTok, YouTube, Facebook</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">27</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">28</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">29</span>
+                <span class="post-count">2</span>
+                <div class="day-platforms">
+                    <span class="platform-icon instagram"><i class="fab fa-instagram"></i></span>
+                    <span class="platform-icon tiktok"><i class="fab fa-tiktok"></i></span>
+                </div>
+                <span class="tooltip">2 postări: Instagram, TikTok</span>
+            </div>
+
+            <!-- Săptămâna 5 (30-31 Martie + Aprilie) -->
+            <div class="calendar-day">
+                <span class="day-number">30</span>
+                <span class="tooltip">Fără postări</span>
+            </div>
+            <div class="calendar-day">
+                <span class="day-number">31</span>
+                <span class="post-count">1</span>
+                <div class="day-platforms">
+                    <span class="platform-icon facebook"><i class="fab fa-facebook"></i></span>
+                </div>
+                <span class="tooltip">1 postare: Facebook</span>
+            </div>
+            
+            <!-- Aprilie 2026 (zilele din săptămâna următoare) -->
+            <div class="calendar-day other-month">
+                <span class="day-number">1</span>
+                <span class="tooltip">Aprilie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">2</span>
+                <span class="tooltip">Aprilie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">3</span>
+                <span class="tooltip">Aprilie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">4</span>
+                <span class="tooltip">Aprilie 2026</span>
+            </div>
+            <div class="calendar-day other-month">
+                <span class="day-number">5</span>
+                <span class="tooltip">Aprilie 2026</span>
+            </div>
+        </div>
+
+        <!-- Posts for today -->
+        <div class="posts-section">
+            <div class="posts-header">
+                <h3>
+                    <i class="fas fa-tasks"></i>
+                    Postări pentru 5 Martie 2026
+                </h3>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">4 postări programate</span>
+            </div>
+
+            <div class="posts-grid">
+                <!-- Instagram post -->
+                <div class="post-card" data-platform="instagram">
+                    <div class="post-platform instagram">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">Review produs nou ✨</div>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 18:00</span>
+                            <span><i class="fas fa-image"></i> 4</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">#review</span>
+                            <span class="tag">#produs</span>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button onclick="editPost(1)"><i class="fas fa-edit"></i></button>
+                        <button onclick="deletePost(1)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- YouTube post -->
+                <div class="post-card" data-platform="youtube">
+                    <div class="post-platform youtube">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">Tutorial video începători</div>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 15:30</span>
+                            <span><i class="fas fa-clock"></i> 12:34</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">#tutorial</span>
+                            <span class="tag">#educațional</span>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button onclick="editPost(2)"><i class="fas fa-edit"></i></button>
+                        <button onclick="deletePost(2)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- TikTok post -->
+                <div class="post-card" data-platform="tiktok">
+                    <div class="post-platform tiktok">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">Trend challenge #viral</div>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 20:00</span>
+                            <span><i class="fas fa-music"></i> viral</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">#challenge</span>
+                            <span class="tag">#trending</span>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button onclick="editPost(3)"><i class="fas fa-edit"></i></button>
+                        <button onclick="deletePost(3)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- Facebook post -->
+                <div class="post-card" data-platform="facebook">
+                    <div class="post-platform facebook">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">Promoție weekend - 20%</div>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 12:00</span>
+                            <span><i class="fas fa-link"></i> link</span>
+                        </div>
+                        <div class="post-tags">
+                            <span class="tag">#promo</span>
+                            <span class="tag">#weekend</span>
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <button onclick="editPost(4)"><i class="fas fa-edit"></i></button>
+                        <button onclick="deletePost(4)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-post-btn" onclick="addNewPost()">
+                <i class="fas fa-plus-circle"></i>
+                Programează postare nouă
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                if (document.documentElement.hasAttribute('data-theme')) {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+        }
+
+        // Calendar functions
+        function previousMonth() {
+            showNotification('Februarie 2026', 'info');
+        }
+
+        function nextMonth() {
+            showNotification('Aprilie 2026', 'info');
+        }
+
+        function jumpToMonth(month) {
+            const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
+            showNotification(`${monthNames[month]} 2026`, 'info');
+        }
+
+        function toggleView(view) {
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            showNotification(`Vizualizare ${view === 'month' ? 'lunară' : 'săptămânală'}`, 'info');
+        }
+
+        function filterPlatform(platform) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const posts = document.querySelectorAll('.post-card');
+            posts.forEach(post => {
+                if (platform === 'all' || post.dataset.platform === platform) {
+                    post.style.display = 'flex';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+            
+            const platformNames = {
+                'all': 'toate platformele',
+                'instagram': 'Instagram',
+                'youtube': 'YouTube',
+                'tiktok': 'TikTok',
+                'facebook': 'Facebook'
+            };
+            showNotification(`Filtrare: ${platformNames[platform]}`, 'info');
+        }
+
+        function editPost(id) {
+            showNotification(`Editezi postarea #${id}`, 'info');
+        }
+
+        function deletePost(id) {
+            if (confirm('Ești sigur că vrei să ștergi această postare?')) {
+                showNotification(`Postarea #${id} a fost ștearsă`, 'success');
+            }
+        }
+
+        function addNewPost() {
+            showNotification('Deschid formular pentru postare nouă', 'info');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initTheme);
+    </script>
+</body>
+</html>

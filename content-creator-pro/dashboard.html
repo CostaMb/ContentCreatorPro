@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ContentCreator Pro</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Boxicons pentru iconițe premium -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- AOS pentru animații -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8a4e6;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --dark-bg: #1e1e2e;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e9ecef;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --sidebar-width: 280px;
+            
+            /* Culori oficiale platforme */
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --tiktok-color: #000000;
+            --tiktok-gradient: linear-gradient(145deg, #25f4ee 0%, #fe2c55 50%, #000000 100%);
+            --youtube-color: #ff0000;
+            --facebook-color: #1877f2;
+        }
+
+        [data-theme="dark"] {
+            --light-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text-primary: #f8f9fa;
+            --text-muted: #b2bec3;
+            --border-color: #2d3a5e;
+            --hover-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            --tiktok-color: #ffffff;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* Navigation Premium */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #a363d9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* User Menu Premium */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .user-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .user-btn i:first-child {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 0.5rem;
+            min-width: 200px;
+            display: none;
+            box-shadow: var(--hover-shadow);
+            z-index: 1000;
+        }
+
+        .user-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--light-bg);
+            transform: translateX(5px);
+        }
+
+        .user-dropdown a i {
+            width: 20px;
+            color: var(--primary-color);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        .theme-toggle {
+            background: var(--border-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7b6ced, var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::after {
+            left: 100%;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar Premium */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-item i {
+            width: 24px;
+            font-size: 1.2rem;
+        }
+
+        .menu-item:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .menu-item.active i {
+            color: white;
+        }
+
+        /* Subscription Info Premium */
+        .subscription-info {
+            background: var(--light-bg);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-top: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .plan-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            border-radius: 30px;
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-badge i {
+            color: gold;
+        }
+
+        .usage-stats {
+            margin-bottom: 1rem;
+        }
+
+        .usage-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .usage-count {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #8b7bf5);
+            border-radius: 3px;
+        }
+
+        /* Main Content */
+        .dashboard-main {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Welcome Section Premium */
+        .welcome-section {
+            margin-bottom: 2rem;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section h1 span {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Quick Actions Premium */
+        .quick-actions {
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-actions h2 i {
+            color: var(--primary-color);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(168, 164, 230, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .action-card:hover::before {
+            opacity: 1;
+        }
+
+        .action-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .action-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .action-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Recent Activity Premium */
+        .recent-activity {
+            margin-bottom: 2rem;
+        }
+
+        .recent-activity h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recent-activity h2 i {
+            color: var(--primary-color);
+        }
+
+        .activity-list {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-item:hover {
+            background: var(--light-bg);
+            transform: translateX(5px);
+        }
+
+        .activity-item i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* Culori platforme activitate */
+        .activity-item i.fa-instagram {
+            background: rgba(228, 64, 95, 0.1);
+            color: #E4405F;
+        }
+
+        .activity-item i.fa-tiktok {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--tiktok-color);
+        }
+
+        .activity-item i.fa-youtube {
+            background: rgba(255, 0, 0, 0.1);
+            color: #FF0000;
+        }
+
+        .activity-item i.fa-facebook {
+            background: rgba(24, 119, 242, 0.1);
+            color: #1877F2;
+        }
+
+        [data-theme="dark"] .activity-item i.fa-tiktok {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .activity-status {
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .activity-status.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success-color);
+        }
+
+        .activity-status:not(.success) {
+            background: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Platform Selector */
+        .platform-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-option {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .platform-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .platform-option.active {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            border: none;
+        }
+
+        .platform-option.active i {
+            color: white;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        /* Generated Content */
+        .generated-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .generated-content h3 {
+            margin-bottom: 1rem;
+        }
+
+        .content-preview {
+            background: var(--light-bg);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .hashtags-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hashtag {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .content-actions button {
+            flex: 1;
+        }
+
+        /* Animations */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .action-card {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .action-card:nth-child(1) { animation-delay: 0s; }
+        .action-card:nth-child(2) { animation-delay: 0.2s; }
+        .action-card:nth-child(3) { animation-delay: 0.4s; }
+        .action-card:nth-child(4) { animation-delay: 0.6s; }
+
+        /* Responsive Premium */
+        @media (max-width: 1200px) {
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                padding: 1rem 0.5rem;
+            }
+
+            .sidebar .menu-item span,
+            .sidebar .plan-badge span,
+            .sidebar .usage-stats,
+            .sidebar .btn-primary span {
+                display: none;
+            }
+
+            .sidebar .menu-item {
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .sidebar .menu-item i {
+                margin: 0;
+            }
+
+            .plan-badge {
+                justify-content: center;
+            }
+
+            .plan-badge i {
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                padding: 1rem;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .sidebar .menu-item span {
+                display: inline;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-selector {
+                flex-direction: column;
+            }
+
+            .platform-option {
+                width: 100%;
+            }
+
+            .content-actions {
+                flex-direction: column;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .dashboard-main {
+                padding: 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 10000;
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color), #00cec9);
+            color: white;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger-color), #e17055);
+            color: white;
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, var(--primary-color), #8b7bf5);
+            color: white;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-video"></i>
+                <span>ContentCreator Pro</span>
+            </div>
+            
+            <div class="nav-right">
+                <!-- User Menu -->
+                <div class="user-menu">
+                    <button class="user-btn" onclick="toggleUserMenu()">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Contul meu</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#" onclick="showProfile()">
+                            <i class="fas fa-user"></i> Profil
+                        </a>
+                        <a href="#" onclick="showSettings()">
+                            <i class="fas fa-cog"></i> Setări
+                        </a>
+                        <a href="#" onclick="showBilling()">
+                            <i class="fas fa-credit-card"></i> Facturare
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Deconectare
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" onclick="showDashboard(event)">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showGenerator(event)">
+                    <i class="fas fa-magic"></i>
+                    <span>Generator Conținut</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showHashtags(event)">
+                    <i class="fas fa-hashtag"></i>
+                    <span>Hashtag Generator</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showPlanner(event)">
+                    <i class="fas fa-calendar"></i>
+                    <span>Content Planner</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showAnalytics(event)">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showHistory(event)">
+                    <i class="fas fa-history"></i>
+                    <span>Istoric</span>
+                </a>
+                <a href="#" class="menu-item" onclick="showSaved(event)">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Salvate</span>
+                </a>
+            </div>
+            
+            <!-- Subscription Info -->
+            <div class="subscription-info">
+                <div class="plan-badge">
+                    <i class="fas fa-crown"></i>
+                    <span>Plan Gratuit</span>
+                </div>
+                <div class="usage-stats">
+                    <div class="usage-item">
+                        <span>Generări azi</span>
+                        <span class="usage-count">2/2</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 100%"></div>
+                    </div>
+                </div>
+                <button class="btn-primary btn-small" onclick="upgradePlan()" style="width: 100%;">
+                    <i class="fas fa-rocket"></i> Upgrade la Pro
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-main">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Bun venit înapoi, <span id="userName">Constantin</span>! 👋</h1>
+                <p>Ce ai vrea să creezi astăzi?</p>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>
+                    <i class="fas fa-bolt"></i>
+                    Acțiuni rapide
+                </h2>
+                <div class="action-grid">
+                    <!-- Card 1: Postare nouă -->
+                    <div class="action-card" onclick="window.location.href='content-generator.html'">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Postare nouă</h3>
+                        <p>Creează conținut pentru orice platformă</p>
+                    </div>
+                    
+                    <!-- Card 2: Hashtag-uri -->
+                    <div class="action-card" onclick="window.location.href='hashtags-page.html'">
+                        <i class="fas fa-hashtag"></i>
+                        <h3>Hashtag-uri</h3>
+                        <p>Generează hashtag-uri populare</p>
+                    </div>
+                    
+                    <!-- Card 3: Programează -->
+                    <div class="action-card" onclick="window.location.href='content-planner.html'">
+                        <i class="fas fa-calendar-plus"></i>
+                        <h3>Programează</h3>
+                        <p>Planifică postări viitoare</p>
+                    </div>
+
+                    <!-- Card 4: Analizează -->
+                    <div class="action-card" onclick="window.location.href='analytics.html'">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Analizează</h3>
+                        <p>Vezi performanța conținutului</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h2>
+                    <i class="fas fa-history"></i>
+                    Activitate recentă
+                </h2>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <i class="fab fa-instagram"></i>
+                        <div class="activity-details">
+                            <h4>Postare Instagram generată</h4>
+                            <p>Acum 2 ore • 24 de aprecieri</p>
+                        </div>
+                        <span class="activity-status success">Publicat</span>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <i class="fab fa-tiktok"></i>
+                        <div class="activity-details">
+                            <h4>Script TikTok generat</h4>
+                            <p>Ieri • 1.2k vizualizări</p>
+                        </div>
+                        <span class="activity-status success">Viral 🔥</span>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <i class="fab fa-youtube"></i>
+                        <div class="activity-details">
+                            <h4>Descriere YouTube generată</h4>
+                            <p>Acum 3 zile • 156 vizualizări</p>
+                        </div>
+                        <span class="activity-status">În lucru</span>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <i class="fab fa-facebook"></i>
+                        <div class="activity-details">
+                            <h4>Postare Facebook generată</h4>
+                            <p>Acum 5 zile • 45 aprecieri</p>
+                        </div>
+                        <span class="activity-status success">Publicat</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Generator (Hidden by default) -->
+            <div class="content-generator" id="contentGenerator" style="display: none;">
+                <h2>Generator Conținut AI</h2>
+                
+                <div class="platform-selector">
+                    <button class="platform-option active" onclick="selectPlatform('youtube')">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </button>
+                    <button class="platform-option" onclick="selectPlatform('instagram')">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </button>
+                    <button class="platform-option" onclick="selectPlatform('tiktok')">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </button>
+                    <button class="platform-option" onclick="selectPlatform('facebook')">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                </div>
+                
+                <div class="generator-form">
+                    <div class="form-group">
+                        <label>Subiect / Idee principală</label>
+                        <input type="text" class="form-control" placeholder="Ex: Rețetă rapidă de paste" id="topicInput">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tonalitate</label>
+                        <select class="form-control" id="toneSelect">
+                            <option value="professional">Profesional</option>
+                            <option value="casual">Relaxat</option>
+                            <option value="funny">Amuzant</option>
+                            <option value="inspirational">Inspirațional</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Cuvinte cheie (opțional)</label>
+                        <input type="text" class="form-control" placeholder="Separate prin virgulă" id="keywordsInput">
+                    </div>
+                    
+                    <button class="btn-primary btn-large" onclick="generateContent()">
+                        <i class="fas fa-magic"></i> Generează conținut
+                    </button>
+                </div>
+                
+                <!-- Generated Content -->
+                <div class="generated-content" id="generatedContent" style="display: none;">
+                    <h3>Conținut generat</h3>
+                    <div class="content-preview">
+                        <p id="generatedText"></p>
+                    </div>
+                    
+                    <div class="hashtags-preview" id="hashtagsPreview">
+                        <span class="hashtag">#contentcreator</span>
+                        <span class="hashtag">#viral</span>
+                        <span class="hashtag">#trending</span>
+                    </div>
+                    
+                    <div class="content-actions">
+                        <button class="btn-outline" onclick="copyContent()">
+                            <i class="fas fa-copy"></i> Copiază
+                        </button>
+                        <button class="btn-outline" onclick="saveContent()">
+                            <i class="fas fa-save"></i> Salvează
+                        </button>
+                        <button class="btn-primary" onclick="shareContent()">
+                            <i class="fas fa-share"></i> Distribuie
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ===== VARIABILE GLOBALE =====
+        let currentPlatform = 'youtube';
+
+        // ===== FUNCȚII PENTRU MENIU =====
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Închide dropdown-ul la click în afară
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.user-menu')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+
+        // ===== FUNCȚII PENTRU NAVIGARE =====
+        function showDashboard(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('dashboard');
+            showNotification('Dashboard încărcat', 'info');
+        }
+
+        function showGenerator(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('generator');
+            window.location.href = 'content-generator.html';
+        }
+
+        function showHashtags(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('hashtags');
+            window.location.href = 'hashtags-page.html';
+        }
+
+        function showPlanner(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('planner');
+            window.location.href = 'content-planner.html';
+        }
+
+        function showAnalytics(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('analytics');
+            window.location.href = 'analytics.html';
+        }
+
+        function showHistory(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('history');
+            showNotification('Se încarcă istoricul...', 'info');
+        }
+
+        function showSaved(event) {
+            if (event) event.preventDefault();
+            setActiveMenu('saved');
+            showNotification('Se încarcă conținutul salvat...', 'info');
+        }
+
+        function showProfile() {
+            toggleUserMenu();
+            showNotification('Profilul tău', 'info');
+        }
+
+        function showSettings() {
+            toggleUserMenu();
+            showNotification('Setări cont', 'info');
+        }
+
+        function showBilling() {
+            toggleUserMenu();
+            showNotification('Pagina de facturare', 'info');
+        }
+
+        function logout() {
+            toggleUserMenu();
+            localStorage.removeItem('isLoggedIn');
+            showNotification('Te-ai deconectat cu succes!', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        function upgradePlan() {
+            showNotification('✨ Upgrade la Plan Pro - Ofertă specială!', 'info');
+        }
+
+        function setActiveMenu(menu) {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            let activeItem;
+            if (menu === 'dashboard') {
+                activeItem = document.querySelector('.menu-item[onclick="showDashboard(event)"]');
+            }
+            
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+
+        // ===== FUNCȚII PENTRU GENERATOR =====
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            showNotification(`Platformă selectată: ${platform}`, 'info');
+        }
+
+        function generateContent() {
+            const topic = document.getElementById('topicInput').value;
+            if (!topic) {
+                showNotification('Te rugăm să introduci un subiect!', 'error');
+                return;
+            }
+            
+            document.getElementById('generatedContent').style.display = 'block';
+            document.getElementById('generatedText').innerHTML = `Conținut generat pentru ${currentPlatform} despre "${topic}"...`;
+            
+            showNotification('✅ Conținut generat cu succes!', 'success');
+        }
+
+        function copyContent() {
+            showNotification('📋 Conținut copiat în clipboard!', 'success');
+        }
+
+        function saveContent() {
+            showNotification('💾 Conținut salvat în colecția ta!', 'success');
+        }
+
+        function shareContent() {
+            showNotification('📤 Opțiuni de partajare deschise', 'info');
+        }
+
+        // ===== FUNCȚII PENTRU TEMĂ =====
+        function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (!themeToggle) return;
+            
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        function toggleTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                showNotification('🌙 Tema deschisă activată', 'info');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                showNotification('🌞 Tema întunecată activată', 'info');
+            }
+            
+            updateTikTokIcons();
+        }
+
+        function updateTikTokIcons() {
+            const isDarkMode = document.documentElement.hasAttribute('data-theme');
+            document.querySelectorAll('.fab.fa-tiktok, .activity-item i.fa-tiktok').forEach(el => {
+                if (isDarkMode) {
+                    el.style.color = '#ffffff';
+                } else {
+                    el.style.color = '';
+                }
+            });
+        }
+
+        // ===== FUNCȚIE NOTIFICARE PREMIUM =====
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+
+        // ===== INITIALIZARE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            updateTikTokIcons();
+            
+            // Ascultăm pentru modificări ale temei
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'data-theme') {
+                        updateTikTokIcons();
+                    }
+                });
+            });
+
+            observer.observe(document.documentElement, { attributes: true });
+            
+            // Adăugăm efect de float pentru carduri
+            const cards = document.querySelectorAll('.action-card');
+            cards.forEach((card, index) => {
+                card.style.animation = `float 6s ease-in-out infinite`;
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+    </script>
+</body>
+</html>
